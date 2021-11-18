@@ -9,8 +9,11 @@ Title: Flask-Rest-API
 <hr>
 
 ```
+OS : GCP Ubuntu
 DB : AWS RDS (MySQL 8.x)
 Deployment : Docker
+Language : Python3.9.6
+Framework : Flask
 ```
 
 ### Requirement
@@ -43,3 +46,25 @@ sudo docker run --name demo-flask -d -p 80:80 demo-flask
 
 ```
 
+### Setup for Development (Not using docker)
+
+<hr>
+
+```
+0. Create .env and test.log files
+1. Set the .env file
+
+ex) .env
+    # MySQL Connect
+    MYSQL_USER = <user>
+    MYSQL_PASSWORD = <password>
+    MYSQL_HOST = <url>
+    MYSQL_PORT = <port>
+    MYSQL_DB = <db>
+
+    # SQL
+    SELECT_ALL = SELECT * FROM <Table>
+    SELECT_NUM = SELECT * FROM <Table> WHERE <num> = <num>
+
+2. Connect http://localhost/list/all or http://<your-ip>/list/all
+```
