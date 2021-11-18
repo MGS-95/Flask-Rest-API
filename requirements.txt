@@ -1,0 +1,6 @@
+flask
+flask_restful
+sqlalchemy
+pandas
+python-dotenv
+mysql-connector
