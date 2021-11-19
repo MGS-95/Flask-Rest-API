@@ -6,6 +6,7 @@ import pandas as pd
 import json
 import os
 from dotenv import load_dotenv
+
 load_dotenv(verbose=True)
 
 app = Flask(__name__)  # Flask 앱 생성
@@ -20,6 +21,7 @@ board = Table('channel', metadata, autoload=True)
 
 logging.basicConfig(filename='test.log', level=logging.INFO, encoding='UTF-8')
 
+
 class BoardController(Resource):
 
     def get(self, channel_num):
@@ -29,7 +31,7 @@ class BoardController(Resource):
                 print(f"[{ip}] ユーザーが全体情報をリクエストしました。")
                 result = connection.execute(text(os.getenv('SELECT_ALL')))
                 return json_to_dict_board(result)
-            result = connection.execute(text(os.getenv('SELECT_NUM')))
+            result = connection.execute(text(f"{os.getenv('SELECT_NUM')}{channel_num}"))
             print(f"[{ip}] ユーザーが一つ情報をリクエストしました。")
             return json_to_dict_board(result)
 
@@ -45,6 +47,7 @@ def json_to_dict_board(result):
     birthday = []
     inactive = []
     debut = []
+    embed_url = []
     for row in result:
         channel_num.append(row['channel_num'])
         channel_name.append(row['channel_name'])
@@ -54,6 +57,7 @@ def json_to_dict_board(result):
         birthday.append(row['birthday'])
         inactive.append(row['inactive'])
         debut.append(row['debut'])
+        embed_url.append("https://www.youtube.com/embed/live_stream?channel=" + row['channel_id'])
     pd_data = {
         "channel_num": channel_num,
         "channel_name": channel_name,
@@ -62,7 +66,8 @@ def json_to_dict_board(result):
         "published_at": published_at,
         "birthday": birthday,
         "inactive": inactive,
-        "debut": debut
+        "debut": debut,
+        "embed_url": embed_url
     }
     pd_json = pd.DataFrame(pd_data).to_json(orient="records")
     return json.loads(pd_json)
