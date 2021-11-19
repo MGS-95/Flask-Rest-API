@@ -130,3 +130,6 @@ dmypy.json
 
 test.log
 legacy.py
+
+# Exclude database command
+database/
