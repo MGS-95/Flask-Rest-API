@@ -9,13 +9,14 @@ from dotenv import load_dotenv
 
 load_dotenv(verbose=True)
 
-app = Flask(__name__)  # Flask 앱 생성
-api = Api(app)  # API 서버로 사용할 수 있게 해줌.
+app = Flask(__name__)   # Flask 앱 생성
+api = Api(app)          # API 서버로 사용할 수 있게 해줌.
 
 app.config.from_pyfile('config.py')
 
 engine = create_engine(app.config['DB_URL'], encoding="utf-8")
 metadata = MetaData(bind=engine)
+
 
 board = Table('channel', metadata, autoload=True)
 
@@ -55,7 +56,7 @@ def json_to_dict_board(result):
         channel_id.append(row['channel_id'])
         published_at.append(row['published_at'])
         birthday.append(row['birthday'])
-        inactive.append(row['inactive'])
+        inactive.append(False) if row['inactive'] == 0 else inactive.append(True)
         debut.append(row['debut'])
         embed_url.append("https://www.youtube.com/embed/live_stream?channel=" + row['channel_id'])
     pd_data = {
