@@ -66,5 +66,6 @@ ex) .env
     SELECT_ALL = SELECT * FROM <Table>
     SELECT_NUM = SELECT * FROM <Table> WHERE <num> = <num>
 
-2. Connect http://localhost/list/all or http://<your-ip>/list/all
+2. C:\~\Flask-Rest-API>python main.py 
+3. Connect http://localhost/list/all or http://<your-ip>/list/all
 ```
