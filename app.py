@@ -1,11 +1,10 @@
 from flask import Flask, request
-from flask_restful import Resource, Api, reqparse, abort
+from flask_restful import Resource, Api
 from sqlalchemy import create_engine, text, MetaData, Table
 import logging
-import pandas as pd
-import json
 import os
 from dotenv import load_dotenv
+import service
 
 load_dotenv(verbose=True)
 
@@ -31,48 +30,12 @@ class BoardController(Resource):
             if channel_num == "all":
                 print(f"[{ip}] ユーザーが全体情報をリクエストしました。")
                 result = connection.execute(text(os.getenv('SELECT_ALL')))
-                return json_to_dict_board(result)
+                return service.json_to_dict_board(result)
             result = connection.execute(text(f"{os.getenv('SELECT_NUM')}{channel_num}"))
             print(f"[{ip}] ユーザーが一つ情報をリクエストしました。")
-            return json_to_dict_board(result)
+            return service.json_to_dict_board(result)
 
 api.add_resource(BoardController, '/list/<channel_num>')
-
-
-def json_to_dict_board(result):
-    channel_num = []
-    channel_name = []
-    channel_url = []
-    channel_id = []
-    published_at = []
-    birthday = []
-    inactive = []
-    debut = []
-    embed_url = []
-    for row in result:
-        channel_num.append(row['channel_num'])
-        channel_name.append(row['channel_name'])
-        channel_url.append(row['channel_url'])
-        channel_id.append(row['channel_id'])
-        published_at.append(row['published_at'])
-        birthday.append(row['birthday'])
-        inactive.append(False) if row['inactive'] == 0 else inactive.append(True)
-        debut.append(row['debut'])
-        embed_url.append("https://www.youtube.com/embed/live_stream?channel=" + row['channel_id'])
-    pd_data = {
-        "channel_num": channel_num,
-        "channel_name": channel_name,
-        "channel_url": channel_url,
-        "channel_id" : channel_id,
-        "published_at": published_at,
-        "birthday": birthday,
-        "inactive": inactive,
-        "debut": debut,
-        "embed_url": embed_url
-    }
-    pd_json = pd.DataFrame(pd_data).to_json(orient="records")
-    return json.loads(pd_json)
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=80)
