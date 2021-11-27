@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv(verbose=True)
 
-app = Flask(__name__)   # Flask 앱 생성
+app = Flask(__name__)   # Flask 앱 생성 (__name__ 값에 app 이름을 지정. 기본값은 app)
 api = Api(app)          # API 서버로 사용할 수 있게 해줌.
 
 app.config.from_pyfile('config.py')
