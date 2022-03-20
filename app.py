@@ -29,11 +29,11 @@ class BoardController(Resource):
         with engine.connect() as connection:
             if channel_num == "all":
                 print(f"[{ip}] ユーザーが全体情報をリクエストしました。")
-                result = connection.execute(text(os.getenv('SELECT_ALL')))
-                return service.json_to_dict_board(result)
-            result = connection.execute(text(f"{os.getenv('SELECT_NUM')}{channel_num}"))
+                query = connection.execute(text(os.getenv('SELECT_ALL')))
+                return service.json_to_dict_board(query)
+            query = connection.execute(text(f"{os.getenv('SELECT_NUM')}{channel_num}"))
             print(f"[{ip}] ユーザーが一つ情報をリクエストしました。")
-            return service.json_to_dict_board(result)
+            return service.json_to_dict_board(query)
 
 api.add_resource(BoardController, '/list/<channel_num>')
 
