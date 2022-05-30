@@ -133,3 +133,5 @@ legacy.py
 
 # Exclude database command
 database/
+
+test/
